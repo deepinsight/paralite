@@ -1,8 +1,8 @@
 /**
  * Copyright (c) 2015 by Contributors
  */
-#ifndef DIFACTO_LOSS_FM_LOSS_H_
-#define DIFACTO_LOSS_FM_LOSS_H_
+#ifndef DIFACTO_LOSS_FFM_LOSS_H_
+#define DIFACTO_LOSS_FFM_LOSS_H_
 #include <vector>
 #include <cmath>
 #include "difacto/base.h"
@@ -174,4 +174,4 @@ class FFMLoss : public Loss {
 };
 
 }  // namespace difacto
-#endif  // DIFACTO_LOSS_FM_LOSS_H_
+#endif  // DIFACTO_LOSS_FFM_LOSS_H_

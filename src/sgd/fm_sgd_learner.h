@@ -1,8 +1,8 @@
 /**
  *  Copyright (c) 2015 by Contributors
  */
-#ifndef DIFACTO_SGD_SGD_LEARNER_H_
-#define DIFACTO_SGD_SGD_LEARNER_H_
+#ifndef DIFACTO_FM_SGD_LEARNER_H_
+#define DIFACTO_FM_SGD_LEARNER_H_
 #include <string>
 #include <vector>
 #include "difacto/learner.h"
@@ -11,21 +11,21 @@
 #include "difacto/node_id.h"
 #include "difacto/reporter.h"
 #include "./sgd_utils.h"
-#include "./sgd_updater.h"
-#include "./sgd_param.h"
+#include "./fm_sgd_updater.h"
+#include "./fm_sgd_param.h"
 
 
 namespace difacto {
 
-class SGDLearner : public Learner {
+class FMSGDLearner : public Learner {
  public:
-  SGDLearner() {
+  FMSGDLearner() {
     store_ = nullptr;
     loss_ = nullptr;
     reporter_ = nullptr;
   }
 
-  virtual ~SGDLearner() {
+  virtual ~FMSGDLearner() {
     delete loss_;
     delete store_;
     // reporter_ was deleted by shared_ptr
@@ -39,8 +39,8 @@ class SGDLearner : public Learner {
     epoch_end_callback_.push_back(callback);
   }
 
-  SGDUpdater* GetUpdater() {
-    return CHECK_NOTNULL(std::static_pointer_cast<SGDUpdater>(
+  FMSGDUpdater* GetUpdater() {
+    return CHECK_NOTNULL(std::static_pointer_cast<FMSGDUpdater>(
         CHECK_NOTNULL(store_)->updater()).get());
   }
 
@@ -104,7 +104,11 @@ class SGDLearner : public Learner {
    */
   void IterateData(const sgd::Job& job, sgd::Progress* prog);
 
-  void GetPos(const SArray<int>& len, SArray<int>* V_pos);
+  real_t EvaluatePenalty(const SArray<real_t>& weight,
+                         const SArray<int>& w_pos,
+                         const SArray<int>& V_pos);
+  void GetPos(const SArray<int>& len,
+              SArray<int>* w_pos, SArray<int>* V_pos);
 
   /** \brief the model store*/
   Store* store_;
@@ -113,15 +117,16 @@ class SGDLearner : public Learner {
   /** \brief the reporter*/
   Reporter* reporter_;
   /** \brief parameters */
-  SGDLearnerParam param_;
+  FMSGDLearnerParam param_;
   // progress for reporter;
   sgd::Report_prog report_prog_;
   int blk_nthreads_ = DEFAULT_NTHREADS;
   double start_time_;
+  bool do_embedding_ = false;
 
   std::vector<std::function<void(int epoch, const sgd::Progress& train,
                                  const sgd::Progress& val)>> epoch_end_callback_;
 };
 
 }  // namespace difacto
-#endif  // DIFACTO_SGD_SGD_LEARNER_H_
+#endif  // DIFACTO_FM_SGD_LEARNER_H_

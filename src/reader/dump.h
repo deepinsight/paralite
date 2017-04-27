@@ -6,7 +6,8 @@
 #include <string>
 #include "dmlc/parameter.h"
 #include "dmlc/io.h"
-#include "sgd/sgd_updater.h"
+#include "sgd/ffm_sgd_updater.h"
+#include "sgd/fm_sgd_updater.h"
 namespace difacto {
 
 struct DumpParam : public dmlc::Parameter<DumpParam> {
@@ -22,7 +23,7 @@ struct DumpParam : public dmlc::Parameter<DumpParam> {
   bool dump_aux;
   
   DMLC_DECLARE_PARAMETER(DumpParam) {
-    DMLC_DECLARE_FIELD(updater).set_default("sgd");
+    DMLC_DECLARE_FIELD(updater).set_default("ffmsgd");
     DMLC_DECLARE_FIELD(model_in).set_default("");
     DMLC_DECLARE_FIELD(name_dump).set_default("dump.txt");
     DMLC_DECLARE_FIELD(need_reverse).set_default(false);
@@ -46,8 +47,10 @@ class Dump {
       return;
     }
 
-    if (param_.updater == "sgd"){
-      updater_ = std::shared_ptr<Updater>(new SGDUpdater());
+    if (param_.updater == "ffmsgd"){
+      updater_ = std::shared_ptr<Updater>(new FFMSGDUpdater());
+    } else if (param_.updater == "fmsgd") {
+      updater_ = std::shared_ptr<Updater>(new FMSGDUpdater());
     } else {
       LOG(FATAL) << "Unkonwn updater: " << param_.updater;
     }

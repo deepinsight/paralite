@@ -2,13 +2,13 @@
  * Copyright (c) 2015 by Contributors
  */
 #include <string.h>
-#include "./sgd_updater.h"
+#include "./ffm_sgd_updater.h"
 #include "difacto/store.h"
 namespace difacto {
 
-DMLC_REGISTER_PARAMETER(SGDUpdaterParam);
+DMLC_REGISTER_PARAMETER(FFMSGDUpdaterParam);
 
-KWArgs SGDUpdater::Init(const KWArgs& kwargs) {
+KWArgs FFMSGDUpdater::Init(const KWArgs& kwargs) {
   auto remain = param_.InitAllowUnknown(kwargs);
   CHECK_GT(param_.V_dim, 0);
   CHECK_GT(param_.field_num, 0);
@@ -16,7 +16,7 @@ KWArgs SGDUpdater::Init(const KWArgs& kwargs) {
   return remain;
 }
 
-void SGDUpdater::Evaluate(sgd::Progress* prog) const {
+void FFMSGDUpdater::Evaluate(sgd::Progress* prog) const {
   real_t objv = 0;
   size_t nnz = 0;
   mu_.lock();
@@ -34,7 +34,7 @@ void SGDUpdater::Evaluate(sgd::Progress* prog) const {
   prog->nnz_w = nnz;
 }
 
-void SGDUpdater::Get(const SArray<feaid_t>& fea_ids,
+void FFMSGDUpdater::Get(const SArray<feaid_t>& fea_ids,
                      int val_type,
                      SArray<real_t>* weights,
                      SArray<int>* lens) {
@@ -58,7 +58,7 @@ void SGDUpdater::Get(const SArray<feaid_t>& fea_ids,
   weights->resize(p);
 }
 
-void SGDUpdater::Update(const SArray<feaid_t>& fea_ids,
+void FFMSGDUpdater::Update(const SArray<feaid_t>& fea_ids,
                         int value_type,
                         const SArray<real_t>& values,
                         const SArray<int>& lens) {
@@ -95,7 +95,7 @@ void SGDUpdater::Update(const SArray<feaid_t>& fea_ids,
   }
 }
 
-void SGDUpdater::UpdateV(real_t const* gV, SGDEntry* e) {
+void FFMSGDUpdater::UpdateV(real_t const* gV, FFMSGDEntry* e) {
   int nnz = e->nnz;
   for (int i = 0; i < feat_dim; ++i) {
     real_t sg = e->Z[i];
@@ -126,7 +126,7 @@ void SGDUpdater::UpdateV(real_t const* gV, SGDEntry* e) {
   new_w += (e->nnz - nnz);
 }
 
-void SGDUpdater::InitV(SGDEntry* e) {
+void FFMSGDUpdater::InitV(FFMSGDEntry* e) {
   e->V = new real_t[feat_dim];
   e->Z = new real_t[feat_dim*2];
   for (int i = 0; i < feat_dim; ++i) {

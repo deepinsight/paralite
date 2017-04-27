@@ -3,24 +3,24 @@
  * @file   sgd.h
  * @brief  the stochastic gradient descent solver
  */
-#ifndef DIFACTO_SGD_SGD_UPDATER_H_
-#define DIFACTO_SGD_SGD_UPDATER_H_
+#ifndef DIFACTO_FFM_SGD_UPDATER_H_
+#define DIFACTO_FFM_SGD_UPDATER_H_
 #include <vector>
 #include <mutex>
 #include <limits>
 #include "dmlc/io.h"
 #include "difacto/updater.h"
-#include "./sgd_param.h"
+#include "./ffm_sgd_param.h"
 #include "./sgd_utils.h"
 namespace difacto {
 
 /**
  * \brief the weight entry for one feature
  */
-struct SGDEntry {
+struct FFMSGDEntry {
  public:
-  SGDEntry() { }
-  ~SGDEntry() { delete [] V; delete [] Z;}
+  FFMSGDEntry() { }
+  ~FFMSGDEntry() { delete [] V; delete [] Z;}
   /** \brief the number of appearence of this feature in the data so far */
   real_t fea_cnt = 0;
   /** \brief V and its aux data */
@@ -61,10 +61,10 @@ struct SGDEntry {
  *   the l1 regularizer
  * - V is updated by adagrad
  */
-class SGDUpdater : public Updater {
+class FFMSGDUpdater : public Updater {
  public:
-  SGDUpdater() {}
-  virtual ~SGDUpdater() {}
+  FFMSGDUpdater() {}
+  virtual ~FFMSGDUpdater() {}
 
   KWArgs Init(const KWArgs& kwargs) override;
 
@@ -140,15 +140,15 @@ class SGDUpdater : public Updater {
 
   void Evaluate(sgd::Progress* prog) const;
 
-  const SGDUpdaterParam& param() const { return param_; }
+  const FFMSGDUpdaterParam& param() const { return param_; }
 
  private:
 
   /** \brief update V by adagrad */
-  void UpdateV(real_t const* gV, SGDEntry* e);
+  void UpdateV(real_t const* gV, FFMSGDEntry* e);
 
   /** \brief init V */
-  void InitV(SGDEntry* e);
+  void InitV(FFMSGDEntry* e);
 
   /** \brief new w for a server */
   float new_w = 0;
@@ -156,8 +156,8 @@ class SGDUpdater : public Updater {
   /** \brief dim of a feature */
   int feat_dim = 0;
 
-  SGDUpdaterParam param_;
-  std::unordered_map<feaid_t, SGDEntry> model_;
+  FFMSGDUpdaterParam param_;
+  std::unordered_map<feaid_t, FFMSGDEntry> model_;
   mutable std::mutex mu_;
 };
 

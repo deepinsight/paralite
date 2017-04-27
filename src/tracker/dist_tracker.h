@@ -52,7 +52,9 @@ class DistTracker : public Tracker {
     return remain;
   }
 
-  void Issue(const std::vector<std::pair<int, std::string>>& jobs) override { }
+  void Issue(const std::vector<std::pair<int, std::string>>& jobs) override { 
+    for (const auto& w : jobs) Send(-1, w.second, w.first);
+  }
 
   /**
    * \brief send jobs to nodes and wait them finished.

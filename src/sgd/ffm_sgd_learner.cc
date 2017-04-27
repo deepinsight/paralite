@@ -1,7 +1,7 @@
 /**
  *  Copyright (c) 2015 by Contributors
  */
-#include "./sgd_learner.h"
+#include "./ffm_sgd_learner.h"
 #include <stdlib.h>
 #include <memory>
 #include <thread>
@@ -23,7 +23,7 @@ struct BatchJob {
   SharedRowBlockContainer<unsigned> data;
 };
 
-KWArgs SGDLearner::Init(const KWArgs& kwargs) {
+KWArgs FFMSGDLearner::Init(const KWArgs& kwargs) {
   // init tracker
   auto remain = Learner::Init(kwargs);
   // init param
@@ -32,7 +32,7 @@ KWArgs SGDLearner::Init(const KWArgs& kwargs) {
   reporter_ = Reporter::Create();
   remain = reporter_->Init(remain);
   // init updater
-  auto updater = new SGDUpdater();
+  auto updater = new FFMSGDUpdater();
   remain = updater->Init(remain);
   remain.push_back(std::make_pair("V_dim", std::to_string(updater->param().V_dim)));
   remain.push_back(std::make_pair("field_num", std::to_string(updater->param().field_num)));
@@ -48,7 +48,7 @@ KWArgs SGDLearner::Init(const KWArgs& kwargs) {
   return remain;
 }
 
-void SGDLearner::RunScheduler() { 
+void FFMSGDLearner::RunScheduler() { 
   real_t pre_loss = 0, pre_val_auc = 0;
   int k = 0;
   start_time_ = dmlc::GetTime();
@@ -120,7 +120,7 @@ void SGDLearner::RunScheduler() {
   Stop();
 }
 
-void SGDLearner::RunEpoch(int epoch, int job_type, sgd::Progress* prog) {
+void FFMSGDLearner::RunEpoch(int epoch, int job_type, sgd::Progress* prog) {
   // progress merger
   tracker_->SetMonitor(
       [this, prog](int node_id, const std::string& rets) {
@@ -147,7 +147,7 @@ void SGDLearner::RunEpoch(int epoch, int job_type, sgd::Progress* prog) {
   }
 }
 
-void SGDLearner::Process(const std::string& args, std::string* rets) {
+void FFMSGDLearner::Process(const std::string& args, std::string* rets) {
   if (args.empty()) return;
   using sgd::Job;
   sgd::Progress prog;
@@ -181,7 +181,7 @@ void SGDLearner::Process(const std::string& args, std::string* rets) {
   prog.SerializeToString(rets);
 }
 
-void SGDLearner::GetPos(const SArray<int>& len,
+void FFMSGDLearner::GetPos(const SArray<int>& len,
                         SArray<int>* V_pos) {
   size_t n = len.size();
   V_pos->resize(n);
@@ -194,7 +194,7 @@ void SGDLearner::GetPos(const SArray<int>& len,
   }
 }
 
-void SGDLearner::IterateData(const sgd::Job& job, sgd::Progress* progress) {
+void FFMSGDLearner::IterateData(const sgd::Job& job, sgd::Progress* progress) {
   AsyncLocalTracker<BatchJob> batch_tracker;
   batch_tracker.SetExecutor(
       [this, progress](const BatchJob& batch,

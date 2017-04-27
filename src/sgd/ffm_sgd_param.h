@@ -1,15 +1,15 @@
 /**
  *  Copyright (c) 2015 by Contributors
  */
-#ifndef DIFACTO_SGD_SGD_PARAM_H_
-#define DIFACTO_SGD_SGD_PARAM_H_
+#ifndef DIFACTO_FFM_SGD_PARAM_H_
+#define DIFACTO_FFM_SGD_PARAM_H_
 #include <string>
 #include "dmlc/parameter.h"
 namespace difacto {
 /**
  * \brief sgd config
  */
-struct SGDLearnerParam : public dmlc::Parameter<SGDLearnerParam> {
+struct FFMSGDLearnerParam : public dmlc::Parameter<FFMSGDLearnerParam> {
   /** \brief The input data, either a filename or a directory. */
   std::string data_in;
   /**
@@ -53,7 +53,7 @@ struct SGDLearnerParam : public dmlc::Parameter<SGDLearnerParam> {
   bool has_aux;
   /** \brief task only for prediction */
   int task;
-  DMLC_DECLARE_PARAMETER(SGDLearnerParam) {
+  DMLC_DECLARE_PARAMETER(FFMSGDLearnerParam) {
     DMLC_DECLARE_FIELD(data_format).set_default("libfm");
     DMLC_DECLARE_FIELD(data_in).set_default("");
     DMLC_DECLARE_FIELD(data_val).set_default("");
@@ -76,7 +76,7 @@ struct SGDLearnerParam : public dmlc::Parameter<SGDLearnerParam> {
   }
 };
 
-struct SGDUpdaterParam : public dmlc::Parameter<SGDUpdaterParam> {
+struct FFMSGDUpdaterParam : public dmlc::Parameter<FFMSGDUpdaterParam> {
   /** \brief the l1 regularizer for :math:`w`: :math:`\lambda_1 |w|_1` */
   float l1;
   /** \brief the l2 regularizer for :math:`w`: :math:`\lambda_2 \|w\|_2^2` */
@@ -106,7 +106,7 @@ struct SGDUpdaterParam : public dmlc::Parameter<SGDUpdaterParam> {
   int field_num;
   /** \brief random seed */
   unsigned int seed;
-  DMLC_DECLARE_PARAMETER(SGDUpdaterParam) {
+  DMLC_DECLARE_PARAMETER(FFMSGDUpdaterParam) {
     DMLC_DECLARE_FIELD(l1).set_range(0, 1e10).set_default(1);
     DMLC_DECLARE_FIELD(l2).set_range(0, 1e10).set_default(0);
     DMLC_DECLARE_FIELD(V_l2).set_range(0, 1e10).set_default(.01);

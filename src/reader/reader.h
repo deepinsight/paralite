@@ -8,6 +8,10 @@
 #include "dmlc/data.h"
 #include "data/parser.h"
 #include "data/libfm_parser.h"
+#include "data/libsvm_parser.h"
+#include "./adfea_parser.h"
+#include "./crb_parser.h"
+#include "./criteo_parser.h"
 namespace difacto {
 /**
  * \brief a reader reads a chunk of data with roughly same size a time
@@ -27,6 +31,16 @@ class Reader {
 
     if (format == "libfm") {
       parser_ = new dmlc::data::LibFMParser<feaid_t>(input, 1);
+    } else if (format == "libsvm") {
+      parser_ = new dmlc::data::LibSVMParser<feaid_t>(input, 1);
+    } else if (format == "criteo") {
+      parser_ = new CriteoParser(input, true);
+    } else if (format == "criteo_test") {
+      parser_ = new CriteoParser(input, false);
+    } else if (format ==  "adfea") {
+      parser_ = new AdfeaParser(input);
+    } else if (format == "rec") {
+      parser_ = new CRBParser(input);
     } else {
       LOG(FATAL) << "unknown format " << format;
     }
