@@ -41,11 +41,12 @@ class Localizer {
   void Compact(const dmlc::RowBlock<feaid_t>& blk,
                dmlc::data::RowBlockContainer<unsigned> *compacted,
                std::vector<feaid_t>* uniq_idx = NULL,
-               std::vector<real_t>* idx_frq = NULL) {
+               std::vector<real_t>* idx_frq = NULL,
+               bool field_info = false) {
     std::vector<feaid_t>* uidx =
         uniq_idx == NULL ? new std::vector<feaid_t>() : uniq_idx;
     CountUniqIndex(blk, uidx, idx_frq);
-    RemapIndex(blk, *uidx, compacted);
+    RemapIndex(blk, *uidx, compacted, field_info);
     if (uniq_idx == NULL) delete uidx;
     Clear();
   }
@@ -73,7 +74,8 @@ class Localizer {
    */
   void RemapIndex(const dmlc::RowBlock<feaid_t>& blk,
                   const std::vector<feaid_t>& idx_dict,
-                  dmlc::data::RowBlockContainer<unsigned> *compacted);
+                  dmlc::data::RowBlockContainer<unsigned> *compacted,
+                  bool field_info);
 
   /**
    * @brief Clears the temporal results

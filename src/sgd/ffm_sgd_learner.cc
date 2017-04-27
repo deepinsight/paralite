@@ -278,7 +278,7 @@ void FFMSGDLearner::IterateData(const sgd::Job& job, sgd::Progress* progress) {
     auto feaids = std::make_shared<std::vector<feaid_t>>();
     auto feacnt = std::make_shared<std::vector<real_t>>();
     Localizer lc(-1, blk_nthreads_);
-    lc.Compact(reader->Value(), data, feaids.get(), push_cnt ? feacnt.get() : nullptr);
+    lc.Compact(reader->Value(), data, feaids.get(), push_cnt ? feacnt.get() : nullptr, true);
 
     // save results into batch
     BatchJob batch;

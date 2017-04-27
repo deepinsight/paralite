@@ -53,7 +53,8 @@ void Localizer::CountUniqIndex(
 void Localizer::RemapIndex(
     const dmlc::RowBlock<feaid_t>& blk,
     const std::vector<feaid_t>& idx_dict,
-    dmlc::data::RowBlockContainer<unsigned> *compacted) {
+    dmlc::data::RowBlockContainer<unsigned> *compacted,
+    bool field_info) {
   if (blk.size == 0 || idx_dict.empty()) return;
   CHECK_LT(idx_dict.size(),
            static_cast<size_t>(std::numeric_limits<unsigned>::max()));
@@ -82,7 +83,7 @@ void Localizer::RemapIndex(
   CHECK_NOTNULL(o);
   o->offset.resize(blk.size+1); o->offset[0] = 0;
   o->index.resize(matched);
-  o->field.resize(matched);
+  if(field_info) o->field.resize(matched);
   if (blk.value) o->value.resize(matched);
 
   size_t k = 0;
@@ -90,7 +91,7 @@ void Localizer::RemapIndex(
     for (size_t j = blk.offset[i]; j < blk.offset[i+1]; ++j) {
       if (remapped_idx[j] == 0) continue;
       if (blk.value) o->value[k] = blk.value[j];
-      o->field[k] = blk.field[j];
+      if(field_info) o->field[k] = blk.field[j];
       o->index[k++] = remapped_idx[j] - 1;
     }
     o->offset[i+1] = k;
