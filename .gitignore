@@ -1,0 +1,13 @@
+build
+deps
+.*
+*.pb.*
+*core*
+docs/html
+docs/xml
+docs/latex
+docs/_build
+*.pyc
+*.d
+*.bak
+*.bk

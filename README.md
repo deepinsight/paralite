@@ -1,3 +1,2 @@
-# DiFacto2_ffm
+# DiFacto_ffm
 Distributed Fieldaware Factorization Machines  
-TODO: SSE support for loss and grad

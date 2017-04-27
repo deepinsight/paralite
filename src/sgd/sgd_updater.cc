@@ -98,10 +98,10 @@ void SGDUpdater::Update(const SArray<feaid_t>& fea_ids,
 void SGDUpdater::UpdateV(real_t const* gV, SGDEntry* e) {
   int nnz = e->nnz;
   for (int i = 0; i < feat_dim; ++i) {
-    real_t sg = e->Z[i]
+    real_t sg = e->Z[i];
     real_t vi = e->V[i];
     // update sqrt_g
-    gv = gV[i];
+    real_t gv = gV[i];
     gv += vi * param_.l2;
     e->Z[i] = sqrt(sg * sg + gv * gv);
     // update z
