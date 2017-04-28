@@ -75,7 +75,6 @@ void FFMSGDUpdater::Update(const SArray<feaid_t>& fea_ids,
     }
   } else if (value_type == Store::kGradient) {
     size_t size = fea_ids.size();
-    CHECK_EQ(values.size(), size * feat_dim);
     CHECK_EQ(lens.size(), size);
     int p = 0;
     real_t* v = values.data();

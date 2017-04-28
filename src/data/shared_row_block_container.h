@@ -82,7 +82,7 @@ struct SharedRowBlockContainer {
       blk.weight = weight.data();
     }
     CHECK_EQ(index.size(), offset.back() - offset.front());
-    CHECK_EQ(field.size(), offset.back() - offset.front());
+    if(field.size()) CHECK_EQ(field.size(), offset.back() - offset.front());
     blk.index = index.data();
     blk.field = field.data();
     blk.value = nullptr;
