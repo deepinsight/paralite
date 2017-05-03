@@ -13,6 +13,8 @@ KWArgs FFMSGDUpdater::Init(const KWArgs& kwargs) {
   CHECK_GT(param_.V_dim, 0);
   CHECK_GT(param_.field_num, 0);
   feat_dim = param_.V_dim * param_.field_num;
+  coef = 1.0f / sqrt(param_.V_dim);
+  distribution = std::uniform_real_distribution<float>(-param_.V_init_scale, param_.V_init_scale);
   return remain;
 }
 
@@ -100,10 +102,12 @@ void FFMSGDUpdater::UpdateV(real_t const* gV, FFMSGDEntry* e) {
     real_t sg = e->Z[i];
     real_t vi = e->V[i];
     // update sqrt_g
-    real_t gv = gV[i];
-    gv += vi * param_.l2;
+    real_t gv = gV[i] + vi * param_.l2;
     e->Z[i] = sqrt(sg * sg + gv * gv);
     // update z
+    e->V[i] -= param_.lr * e->Z[i] * gv;
+    // FTRL
+    /*
     e->Z[i + feat_dim] -= gv - (e->Z[i] - sg) / param_.lr * vi;
 
     real_t z = e->Z[i + feat_dim];
@@ -111,9 +115,10 @@ void FFMSGDUpdater::UpdateV(real_t const* gV, FFMSGDEntry* e) {
     if (z <= l1 && z >= - l1) {
       e->V[i] = 0;
     } else {
-      real_t eta = (param_.lr_beta + e->Z[i]) / param_.lr;
+      real_t eta = (param_.lr_beta + e->Z[i]) / param_.lr + param_.l2;;
       e->V[i] = (z > 0 ? z - l1 : z + l1) / eta;
     }
+    */
 
     // update statistics
     if (vi == 0 && e->V[i] != 0) {
@@ -129,10 +134,13 @@ void FFMSGDUpdater::InitV(FFMSGDEntry* e) {
   e->V = new real_t[feat_dim];
   e->Z = new real_t[feat_dim*2];
   for (int i = 0; i < feat_dim; ++i) {
-    e->V[i] = (rand_r(&param_.seed) / (real_t)RAND_MAX - 0.5) * param_.V_init_scale;
+    //e->V[i] = (rand_r(&param_.seed) / (real_t)RAND_MAX - 0.5) * param_.V_init_scale;
+    e->V[i] = coef * distribution(generator);
     if (e->V[i] != 0) e->nnz += 1;
   }
-  memset(e->Z, 0, feat_dim*2 * sizeof(real_t));
+  //memset(e->Z, 0, feat_dim*2 * sizeof(real_t));
+  memset(e->Z, 1.0, feat_dim * sizeof(real_t));
+  memset(e->Z + feat_dim, 0, feat_dim * sizeof(real_t));
   e->size = feat_dim;
   new_w += e->nnz;
 }

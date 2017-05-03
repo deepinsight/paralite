@@ -69,7 +69,7 @@ struct FFMSGDLearnerParam : public dmlc::Parameter<FFMSGDLearnerParam> {
     DMLC_DECLARE_FIELD(pred_prob).set_default(true);
     DMLC_DECLARE_FIELD(neg_sampling).set_default(1);
     DMLC_DECLARE_FIELD(report_interval).set_default(1);
-    DMLC_DECLARE_FIELD(stop_rel_objv).set_default(1e-5);
+    DMLC_DECLARE_FIELD(stop_rel_objv).set_default(1e-6);
     DMLC_DECLARE_FIELD(stop_val_auc).set_default(1e-5);
     DMLC_DECLARE_FIELD(has_aux).set_default(false);
     DMLC_DECLARE_FIELD(task).set_default(0);
