@@ -81,16 +81,16 @@ struct FFMSGDUpdaterParam : public dmlc::Parameter<FFMSGDUpdaterParam> {
   float l1;
   /** \brief the l2 regularizer for :math:`w`: :math:`\lambda_2 \|w\|_2^2` */
   float l2;
-  /** \brief the l2 regularizer for :math:`V`: :math:`\lambda_2 \|V_i\|_2^2` */
+  /** \brief the l2 regularizer for :math:`V`: :math:`\lambda_2 \|V_i\|_2^2`  useless */
   float V_l2;
 
   /** \brief the learning rate :math:`\eta` (or :math:`\alpha`) for :math:`w` */
   float lr;
   /** \brief learning rate :math:`\beta` */
   float lr_beta;
-  /** \brief learning rate :math:`\eta` for :math:`V`. */
+  /** \brief learning rate :math:`\eta` for :math:`V`.  useless */
   float V_lr;
-  /** \brief leanring rate :math:`\beta` for :math:`V`. */
+  /** \brief leanring rate :math:`\beta` for :math:`V`. useless */
   float V_lr_beta;
   /**
    * \brief the scale to initialize V.
