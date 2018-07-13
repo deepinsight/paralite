@@ -24,7 +24,7 @@ struct DifactoParam : public dmlc::Parameter<DifactoParam> {
   /** \brief the learner's type, required for a training task */
   std::string learner;
   DMLC_DECLARE_PARAMETER(DifactoParam) {
-    DMLC_DECLARE_FIELD(learner).set_default("ffmsgd");
+    DMLC_DECLARE_FIELD(learner).set_default("fmsgd");
     DMLC_DECLARE_FIELD(task).set_default(kTrain)
         .add_enum("train", kTrain)
         .add_enum("dump", kDumpModel)
