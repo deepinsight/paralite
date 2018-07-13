@@ -16,6 +16,14 @@ yum install -y lz4-devel
 # Glog
 yum install -y glog-devel
 
+# CityHash(optional)
+git clone https://github.com/google/cityhash
+cd cityhash
+./configure --enable-sse4.2
+make all check CXXFLAGS="-g -O3 -msse4.2"
+make install
+
+
 # build
 mkdir build
 cd build
