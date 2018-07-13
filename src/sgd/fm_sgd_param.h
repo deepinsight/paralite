@@ -30,6 +30,8 @@ struct FMSGDLearnerParam : public dmlc::Parameter<FMSGDLearnerParam> {
   std::string loss;
   /** \brief the maximal number of data passes */
   int max_num_epochs;
+  /** \brief the number of threads to calc grads */
+  int nthreads;
   /** \brief the epoch of model_in */
   int load_epoch;
   /** \brief the minibatch size */
@@ -62,6 +64,7 @@ struct FMSGDLearnerParam : public dmlc::Parameter<FMSGDLearnerParam> {
     DMLC_DECLARE_FIELD(loss).set_default("fm");
     DMLC_DECLARE_FIELD(load_epoch).set_default(-1);
     DMLC_DECLARE_FIELD(max_num_epochs).set_default(20);
+    DMLC_DECLARE_FIELD(nthreads).set_default(8);
     DMLC_DECLARE_FIELD(num_jobs_per_epoch).set_default(10);
     DMLC_DECLARE_FIELD(batch_size).set_default(100);
     DMLC_DECLARE_FIELD(shuffle).set_default(10);

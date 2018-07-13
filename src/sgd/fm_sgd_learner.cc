@@ -43,7 +43,7 @@ KWArgs FMSGDLearner::Init(const KWArgs& kwargs) {
   store_->SetReporter(std::shared_ptr<Reporter>(reporter_));
   remain = store_->Init(remain);
   // init loss
-  loss_ = Loss::Create(param_.loss, blk_nthreads_);
+  loss_ = Loss::Create(param_.loss, param_.nthreads);
   remain = loss_->Init(remain);
   
   return remain;
