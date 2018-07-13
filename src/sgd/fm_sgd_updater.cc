@@ -42,9 +42,9 @@ void FMSGDUpdater::Get(const SArray<feaid_t>& fea_ids,
   if (lens) lens->resize(V_dim == 0 ? 0 : size);
   int p = 0;
   for (size_t i = 0; i < size; ++i) {
-    //mu_.lock();
+    mu_.lock();
     auto& e = model_[fea_ids[i]];
-    //mu_.unlock();
+    mu_.unlock();
     (*weights)[p++] = e.w;
     if (e.V && !(param_.l1_shrk && (e.w == 0))) {
       memcpy(weights->data()+p, e.V, V_dim*sizeof(real_t));
@@ -64,9 +64,9 @@ void FMSGDUpdater::Update(const SArray<feaid_t>& fea_ids,
   if (value_type == Store::kFeaCount) {
     CHECK_EQ(fea_ids.size(), values.size());
     for (size_t i = 0; i < fea_ids.size(); ++i) {
-      //mu_.lock();
+      mu_.lock();
       auto& e = model_[fea_ids[i]];
-      //mu_.unlock();
+      mu_.unlock();
       e.fea_cnt += values[i];
       if (param_.V_dim > 0 && e.V == nullptr
           && e.w != 0 && e.fea_cnt > param_.V_threshold) {
@@ -84,9 +84,9 @@ void FMSGDUpdater::Update(const SArray<feaid_t>& fea_ids,
     int p = 0;
     real_t* v = values.data();
     for (size_t i = 0; i < size; ++i) {
-      //mu_.lock();
+      mu_.lock();
       auto& e = model_[fea_ids[i]];
-      //mu_.unlock();
+      mu_.unlock();
       UpdateW(v[p++], &e);
       if (!w_only && lens[i] > 1) {
         CHECK_EQ(lens[i], param_.V_dim+1);
