@@ -16,18 +16,17 @@ IF (CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64.*|AARCH64.*)")
     set(AARCH64 1)
 ENDIF()
 IF (NOT AARCH64)
-    set(MACHINE_FLAGS "-msse4 -mpopcnt -fopenmp")
+    set(MACHINE_FLAGS "-msse4 -mpopcnt -fopenmp -finline-functions")
 ENDIF()
 
 set(COMMON_WARNING_FLAGS "-Wall -Werror -Wnon-virtual-dtor -Wno-sign-compare -Wno-unused-variable -Wno-unused-function -Wno-unused-result")
 
-set(DEFINITION_FLAGS "-DDIFACTO_USE_LZ4=1")
+set(DEFINITION_FLAGS "-DDIFACTO_USE_LZ4=1 -DDIFACTO_USE_CITY=1")
 
 set(CMAKE_BUILD_COLOR_MAKEFILE          ON)
-set(CMAKE_CXX_FLAGS "-std=gnu++1y ${COMMON_WARNING_FLAGS} ${MACHINE_FLAGS} ${DEFINITION_FLAGS}")
+set(CMAKE_CXX_FLAGS "-std=c++11 ${COMMON_WARNING_FLAGS} ${MACHINE_FLAGS} ${DEFINITION_FLAGS}")
 set(CMAKE_CXX_FLAGS_RELEASE             "-O3 -DNDEBUG")
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO      "-O3 -g")
-set(CMAKE_EXE_LINKER_FLAGS              "-static-libgcc -static-libstdc++")
 
 # cmake -DCMAKE_BUILD_TYPE=Debug ..
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
